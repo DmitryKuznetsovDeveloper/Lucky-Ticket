@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8fe3ee9ad1ac4f5f9b2cf6a3a6e48852, type: 3}
+  m_Name: BasePopupConfig
+  m_EditorClassIdentifier: 
+  ShowParams:
+    BgColorTarget: {r: 0, g: 0, b: 0, a: 0.69803923}
+    BgColorFrom: {r: 0, g: 0, b: 0, a: 0}
+    RootFadeTarget: 1
+    RootFadeFrom: 0
+    ScaleFactorFrom: 0.6
+    ScaleFactorTarget: 1
+    Params:
+      Duration: 0.6
+      Delay: 0
+      EaseOut: 30
+      EaseIn: 12
+  HideParams:
+    BgColorTarget: {r: 0, g: 0, b: 0, a: 0}
+    BgColorFrom: {r: 0, g: 0, b: 0, a: 0.69803923}
+    RootFadeTarget: 0
+    RootFadeFrom: 1
+    ScaleFactorFrom: 1
+    ScaleFactorTarget: 0.6
+    Params:
+      Duration: 0.6
+      Delay: 0
+      EaseOut: 12
+      EaseIn: 12
