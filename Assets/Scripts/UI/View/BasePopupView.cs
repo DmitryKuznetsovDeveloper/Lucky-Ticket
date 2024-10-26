@@ -1,6 +1,5 @@
 using Data;
 using DG.Tweening;
-using Sirenix.OdinInspector;
 using UI.View;
 using UnityEngine;
 using UnityEngine.UI;

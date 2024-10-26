@@ -3,7 +3,7 @@ using DG.Tweening;
 namespace UI.ParamsTween
 {
     [Serializable]
-    public class TweenParamsOutIn
+    public sealed class TweenParamsOutIn
     {
         public float Duration;
         public float Delay;
@@ -12,7 +12,7 @@ namespace UI.ParamsTween
     }
 
     [Serializable]
-    public class TweenParamsOut
+    public sealed class TweenParamsOut
     {
         public float Duration;
         public float Delay;

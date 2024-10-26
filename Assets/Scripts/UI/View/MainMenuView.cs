@@ -2,7 +2,7 @@
 using UnityEngine;
 namespace UI.View
 {
-    public class MainMenuView : MonoBehaviour
+    public sealed class MainMenuView : MonoBehaviour
     {
         public BaseButtonView StarButton => _starButton;
         public BaseButtonView SettingsButton => _settingsButton;

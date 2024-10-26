@@ -4,7 +4,7 @@ using VContainer;
 using VContainer.Unity;
 namespace DI
 {
-    public class LoadingLifetimeScope : LifetimeScope
+    public sealed class LoadingLifetimeScope : LifetimeScope
     {
         protected override void Configure(IContainerBuilder builder)
         {

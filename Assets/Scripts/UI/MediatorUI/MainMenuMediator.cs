@@ -1,7 +1,6 @@
 ﻿using System;
 using Game;
 using UI.View;
-using UnityEngine;
 using VContainer.Unity;
 
 namespace UI.MediatorUI
@@ -25,14 +24,13 @@ namespace UI.MediatorUI
             _mainMenuView.StarButton.BaseButton.onClick.AddListener(StartGame);
             _mainMenuView.SettingsButton.BaseButton.onClick.AddListener(SettingsGame);
             _mainMenuView.ExitButton.BaseButton.onClick.AddListener(ExitGame);
-            Debug.Log("Initialize");
         }
         
         public void Dispose()
         {
             _mainMenuView.ExitButton.BaseButton.onClick.RemoveListener(ExitGame);
             _mainMenuView.SettingsButton.BaseButton.onClick.RemoveListener(SettingsGame);
-
+            _mainMenuView.StarButton.BaseButton.onClick.RemoveListener(StartGame);
         }
 
         private void StartGame() => _mainMenuView.StarButton.PlayOnClick(_gameLauncher.LaunchLoadingScreen);

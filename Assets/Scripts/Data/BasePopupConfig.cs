@@ -3,7 +3,7 @@ using UnityEngine;
 namespace Data
 {
     [CreateAssetMenu(fileName = "BasePopupConfig", menuName = "Configs/Animations/BasePopupConfig", order = 0)]
-    public class BasePopupConfig : ScriptableObject
+    public sealed class BasePopupConfig : ScriptableObject
     {
         public PopupStateParams ShowParams;
         public PopupStateParams HideParams;
@@ -11,7 +11,7 @@ namespace Data
 }
 
 [System.Serializable]
-public class PopupStateParams
+public sealed class PopupStateParams
 {
     public Color BgColorTarget;
     public Color BgColorFrom;
