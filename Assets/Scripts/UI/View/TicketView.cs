@@ -8,6 +8,7 @@ namespace UI.View
 {
     public sealed class TicketView : AnimationStatesUIElement<TicketView.AnimationStateTicket, TicketSettings, TicketAnimationsConfig>
     {
+        public BaseButtonView Button => _buyButton;
         [SerializeField] private RectTransform _root;
         [SerializeField] private TMP_Text _titleLabel;
         [SerializeField] private TMP_Text _rewardLabel;
@@ -24,6 +25,7 @@ namespace UI.View
         public void SetScratchFrame(Sprite image) => _scratchFrame.sprite = image;
         public void SetScratchCenter(Texture texture) => _scratchCenter.texture = texture;
         public void SetLocked(bool locked) => _lockedCanvasGroup.SetActive(locked);
+        public void SetBuyButton(bool value) => _buyButton.gameObject.SetActive(value);
         public void SetPriceLabel(int value) => _buyButton.SetLabel(value);
         public enum AnimationStateTicket { Normal, Selected,SelectedLocked, Locked }
         protected override void InitializeSequences()
@@ -48,12 +50,6 @@ namespace UI.View
             return sequence;
         }
         protected override AnimationStateTicket GetDefaultState() => AnimationStateTicket.Normal;
-
-        public void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.A))PlayAnimation(AnimationStateTicket.Normal);
-            if (Input.GetKeyDown(KeyCode.S))PlayAnimation(AnimationStateTicket.Selected);
-        }
     }
 
 }

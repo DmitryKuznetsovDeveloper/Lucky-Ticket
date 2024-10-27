@@ -4,6 +4,7 @@ using Data;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using DG.Tweening;
+using Game;
 using UI.View;
 
 public sealed class InfiniteCarousel : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
@@ -12,16 +13,19 @@ public sealed class InfiniteCarousel : MonoBehaviour, IBeginDragHandler, IDragHa
     [SerializeField] private List<FastTicketConfigs> _configs; // Конфигурации для элементов
     [SerializeField] private float _spacing = 850f; // Расстояние между элементами
     [SerializeField] private float _animationDuration = 1f; // Длительность анимации
+    
     private readonly List<TicketView> _ticketViews = new List<TicketView>(); // Динамически созданные элементы
     private readonly HashSet<int> _hiddenConfigs = new HashSet<int>(); // Индексы скрытых конфигов
     private int _currentIndex = 0; // Индекс текущей центральной конфигурации
     private Vector2 _startDragPosition;
-    private bool _isSwipeBlocked = false;
+    private bool _isSwipeBlocked;
 
     // Событие, которое вызывается при изменении центрального элемента
     public event Action<FastTicketConfigs> OnCenterConfigChanged;
 
     public void SetSwipeBlocked(bool isBlocked) => _isSwipeBlocked = isBlocked;
+    public SimpleScratch GetCurrentSimpleScratch() => _ticketViews[_currentIndex].GetComponentInChildren<SimpleScratch>();
+    public TicketView GetCurrentTicketView() => _ticketViews[_currentIndex];
     private void Start()
     {
         // Создаем три элемента на основе префаба

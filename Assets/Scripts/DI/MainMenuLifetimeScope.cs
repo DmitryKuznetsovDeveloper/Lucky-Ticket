@@ -11,7 +11,6 @@ namespace DI
             builder.Register<MainMenuMediator>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.RegisterComponentInHierarchy<MainMenuView>();
             builder.RegisterComponentInHierarchy<SettingsPopup>();
-            
         }
     }
 }

@@ -6,6 +6,6 @@ namespace UI.View
     {
         [SerializeField] private TMP_Text _currentCurrency;
         
-        public void SeCurrency(int value) => _currentCurrency.text = $"{value}";
+        public void SetCurrency(int value) => _currentCurrency.text = $"{value}";
     }
 }

@@ -1,11 +1,11 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 namespace Game
 {
     public sealed class SimpleScratch : MonoBehaviour
     {
-        public float ErasePercentage => _erasePercentage;
-    
+        public event Action OnEraseCompleted;
         [SerializeField] private Texture2D _brushTexture; 
         [SerializeField] private float _brushSize = 1f; 
     
@@ -51,7 +51,7 @@ namespace Game
             if (_isDirty)
             { 
                 _erasePercentage = (_transparentPixels / (float)_totalPixels) * 100f;
-                Debug.Log("Percentage Erased: " + _erasePercentage + "%");
+                if (_erasePercentage >= 90f) OnEraseCompleted?.Invoke();
                 _isDirty = false;  // Сбрасываем флаг
             }
         }

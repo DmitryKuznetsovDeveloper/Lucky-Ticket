@@ -1,23 +1,33 @@
-
+using System;
+using VContainer.Unity;
 namespace Game
 {
-    public sealed class CurrencyManager
+    public sealed class CurrencyManager : IStartable
     {
-        public int Balance { get; private set; }
+        public event Action<int> OnChangeCurrency ;
+        private int _balance;
 
-        public CurrencyManager(int initialBalance) => Balance = initialBalance;
+        public CurrencyManager( int currency) => _balance = currency;
+        
+        public void Start() => OnChangeCurrency?.Invoke(_balance);
 
-        public void AddCurrency(int amount) => Balance += amount;
-    
+        public void AddCurrency(int amount)
+        {
+            _balance += amount;
+            OnChangeCurrency?.Invoke(_balance);
+        }
+
         public bool SpendCurrency(int amount)
         {
-            if (Balance >= amount)
+            if (_balance >= amount)
             {
-                Balance -= amount;
+                _balance -= amount;
+                OnChangeCurrency?.Invoke(_balance);
                 return true;
             }
             return false;
         }
+
     }
 }
 

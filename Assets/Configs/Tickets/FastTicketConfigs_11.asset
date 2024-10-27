@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: FastTicketConfigs_11
   m_EditorClassIdentifier: 
   TitleLabel: fast lottery
-  BuyButton: 30
+  BuyButton: 27
   ArtIcon: {fileID: 21300000, guid: 8dfca22147d99a440a7952c1c3fdd1b3, type: 3}
   ScratchFrame: {fileID: 21300000, guid: dce54ff5d8fa4d5429ea921f72c89436, type: 3}
   ScratchCenter: {fileID: 2800000, guid: ae9efcc4e964ac440af8738bf519f9a9, type: 3}
