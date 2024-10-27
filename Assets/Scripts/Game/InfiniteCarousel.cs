@@ -16,16 +16,15 @@ public sealed class InfiniteCarousel : MonoBehaviour, IBeginDragHandler, IDragHa
     
     private readonly List<TicketView> _ticketViews = new List<TicketView>(); // Динамически созданные элементы
     private readonly HashSet<int> _hiddenConfigs = new HashSet<int>(); // Индексы скрытых конфигов
-    private int _currentIndex = 0; // Индекс текущей центральной конфигурации
+    private int _currentConfigsIndex;
+    private int _currentViewIndex;
     private Vector2 _startDragPosition;
-    private bool _isSwipeBlocked;
 
     // Событие, которое вызывается при изменении центрального элемента
     public event Action<FastTicketConfigs> OnCenterConfigChanged;
-
-    public void SetSwipeBlocked(bool isBlocked) => _isSwipeBlocked = isBlocked;
-    public SimpleScratch GetCurrentSimpleScratch() => _ticketViews[_currentIndex].GetComponentInChildren<SimpleScratch>();
-    public TicketView GetCurrentTicketView() => _ticketViews[_currentIndex];
+    
+    public SimpleScratch GetCurrentSimpleScratch() => _ticketViews[_currentViewIndex].GetComponentInChildren<SimpleScratch>();
+    public TicketView GetCurrentTicketView() => _ticketViews[_currentViewIndex];
     private void Start()
     {
         // Создаем три элемента на основе префаба
@@ -45,7 +44,7 @@ public sealed class InfiniteCarousel : MonoBehaviour, IBeginDragHandler, IDragHa
     // Метод для обновления данных каждого элемента из конфигураций
     private void UpdateCarouselContent()
     {
-        int visibleIndex = _currentIndex;
+        int visibleIndex = _currentConfigsIndex;
         
         for (int i = 0; i < _ticketViews.Count; i++)
         {
@@ -66,16 +65,10 @@ public sealed class InfiniteCarousel : MonoBehaviour, IBeginDragHandler, IDragHa
     }
 
     // Метод для получения текущей конфигурации центрального элемента
-    public FastTicketConfigs GetCurrentCenterConfig()
-    {
-        return _configs[_currentIndex];
-    }
+    public FastTicketConfigs GetCurrentCenterConfig() => _configs[_currentConfigsIndex];
 
     // Вспомогательный метод для вызова события при изменении центрального элемента
-    private void InvokeCenterConfigChanged()
-    {
-        OnCenterConfigChanged?.Invoke(GetCurrentCenterConfig());
-    }
+    private void InvokeCenterConfigChanged() => OnCenterConfigChanged?.Invoke(GetCurrentCenterConfig());
 
     // Метод для поиска следующего видимого индекса конфигурации, который не скрыт
     private int GetNextVisibleConfigIndex(int startIndex)
@@ -110,6 +103,7 @@ public sealed class InfiniteCarousel : MonoBehaviour, IBeginDragHandler, IDragHa
             // Устанавливаем центральный элемент в последний индекс, чтобы он перекрывал остальные
             _ticketViews[i].transform.SetSiblingIndex(i == 1 ? _ticketViews.Count - 1 : i);
         }
+        _currentViewIndex = 1;
     }
 
     private void UpdateCarouselState()
@@ -147,7 +141,7 @@ public sealed class InfiniteCarousel : MonoBehaviour, IBeginDragHandler, IDragHa
             // Определяем направление сдвига
             if (dragDistance > 0)
             {
-                _currentIndex = GetNextVisibleConfigIndex((_currentIndex - 1 + _configs.Count) % _configs.Count);
+                _currentConfigsIndex = GetNextVisibleConfigIndex((_currentConfigsIndex - 1 + _configs.Count) % _configs.Count);
                 // Перемещаем последний элемент на первую позицию
                 var lastTicket = _ticketViews[2];
                 _ticketViews.RemoveAt(2);
@@ -155,7 +149,7 @@ public sealed class InfiniteCarousel : MonoBehaviour, IBeginDragHandler, IDragHa
             }
             else
             {
-                _currentIndex = GetNextVisibleConfigIndex((_currentIndex + 1) % _configs.Count);
+                _currentConfigsIndex = GetNextVisibleConfigIndex((_currentConfigsIndex + 1) % _configs.Count);
                 // Перемещаем первый элемент на последнюю позицию
                 var firstTicket = _ticketViews[0];
                 _ticketViews.RemoveAt(0);
@@ -167,6 +161,7 @@ public sealed class InfiniteCarousel : MonoBehaviour, IBeginDragHandler, IDragHa
         }
         
         SmoothMoveToCenter();
+        _currentViewIndex = 1;
     }
 
     private void SmoothMoveToCenter()
