@@ -180,6 +180,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 418087901727078069}
+  - component: {fileID: 1686887613936800584}
   m_Layer: 0
   m_Name: CurrencyPanel
   m_TagString: Untagged
@@ -210,6 +211,19 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: -180}
   m_SizeDelta: {x: 500, y: 150}
   m_Pivot: {x: 0.5, y: 1}
+--- !u!114 &1686887613936800584
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5863652274295938497}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be3bfe23b67d46569a457dcfabdc71b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _currentCurrency: {fileID: 3424784935743873041}
 --- !u!1 &6703976301318065077
 GameObject:
   m_ObjectHideFlags: 0

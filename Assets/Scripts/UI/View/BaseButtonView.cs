@@ -1,6 +1,7 @@
 ﻿using System;
 using Data;
 using DG.Tweening;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,6 +16,7 @@ namespace UI.View
         [SerializeField] private Button _button;
         [SerializeField] private RectTransform _root;
         [SerializeField] private Image _bg;
+        [SerializeField] private TMP_Text _labelButton;
 
         private Sequence _clickSequence;
 
@@ -28,6 +30,8 @@ namespace UI.View
         
         private void OnDestroy() => _clickSequence.Kill();
 
+        public void SetLabel(string value) => _labelButton.text = value;
+        public void SetLabel(int value) => _labelButton.text = $"{value}";
         public void PlayOnClick( Action action)
         {
             _clickSequence.OnComplete(() =>

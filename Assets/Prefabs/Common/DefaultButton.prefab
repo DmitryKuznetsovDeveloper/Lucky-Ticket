@@ -92,7 +92,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 30.65
+  m_fontSize: 50
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -232,6 +232,7 @@ MonoBehaviour:
   _button: {fileID: 2236307141542494212}
   _root: {fileID: 4974690437639999837}
   _bg: {fileID: 2156856592037636375}
+  _labelButton: {fileID: 5096334944093781276}
 --- !u!1 &3242804643792158865
 GameObject:
   m_ObjectHideFlags: 0

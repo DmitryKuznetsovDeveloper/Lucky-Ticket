@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace UI
 {
-    public abstract class AnimationStatesBaseUIElement<TState, TSettings, TConfig> : MonoBehaviour
+    public abstract class AnimationStatesUIElement<TState, TSettings, TConfig> : MonoBehaviour
         where TState : Enum
         where TConfig : ScriptableObject
         where TSettings : class
@@ -25,8 +25,8 @@ namespace UI
 
         protected virtual void Awake()
         {
-            _currentState = GetDefaultState();
             InitializeSequences();
+            _currentState = GetDefaultState();
         }
 
         private void OnDisable()
