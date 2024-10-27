@@ -387,7 +387,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 0
+  m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -800,6 +800,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: ScratchTemplate
       objectReference: {fileID: 0}
+    - target: {fileID: 6766257000088983961, guid: 503218414ee792548b26cef8df904e76,
+        type: 3}
+      propertyPath: _brushSize
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1197,6 +1202,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: LockedState
+      objectReference: {fileID: 0}
+    - target: {fileID: 4127083756062220300, guid: 65d7133cc1930b1449f133ea74c30f4f,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7485420139929065551, guid: 65d7133cc1930b1449f133ea74c30f4f,
         type: 3}

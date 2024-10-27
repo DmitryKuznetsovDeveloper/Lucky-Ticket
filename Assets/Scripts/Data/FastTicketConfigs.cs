@@ -5,7 +5,7 @@ using Random = UnityEngine.Random;
 namespace Data
 {
     [CreateAssetMenu(fileName = "FastTicketConfigs", menuName = "Configs/FastTicketConfigs", order = 0)]
-    public class FastTicketConfigs : ScriptableObject
+    public sealed class FastTicketConfigs : ScriptableObject
     {
         public string TitleLabel;
         public int BuyButton;
