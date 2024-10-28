@@ -54,7 +54,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   parentReference:
-    TypeName: DI.ProjectLifetimeScope
+    TypeName: Resources.ProjectLifetimeScope
   autoRun: 1
   autoInjectGameObjects: []
 --- !u!114 &4850617790507390140
@@ -331,6 +331,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_text
       value: Settings
+      objectReference: {fileID: 0}
+    - target: {fileID: 5096334944093781276, guid: c81ee845ca6504546bdbd6df8612f66e,
+        type: 3}
+      propertyPath: m_fontSize
+      value: 58.8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -735,6 +740,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5096334944093781276, guid: c81ee845ca6504546bdbd6df8612f66e,
+        type: 3}
+      propertyPath: m_text
+      value: start
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -28,9 +28,9 @@ namespace UI.MediatorUI
         
         public void Dispose()
         {
-            _mainMenuView.ExitButton.BaseButton.onClick.RemoveListener(ExitGame);
-            _mainMenuView.SettingsButton.BaseButton.onClick.RemoveListener(SettingsGame);
             _mainMenuView.StarButton.BaseButton.onClick.RemoveListener(StartGame);
+            _mainMenuView.SettingsButton.BaseButton.onClick.RemoveListener(SettingsGame);
+            _mainMenuView.ExitButton.BaseButton.onClick.RemoveListener(ExitGame);
         }
 
         private void StartGame() => _mainMenuView.StarButton.PlayOnClick(_gameLauncher.LaunchLoadingScreen);

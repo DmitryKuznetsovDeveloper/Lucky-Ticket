@@ -1071,7 +1071,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   parentReference:
-    TypeName: DI.ProjectLifetimeScope
+    TypeName: Resources.ProjectLifetimeScope
   autoRun: 1
   autoInjectGameObjects: []
 --- !u!1 &5066362606512994554

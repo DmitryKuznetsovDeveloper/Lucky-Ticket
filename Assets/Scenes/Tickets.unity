@@ -371,6 +371,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameScreen
       objectReference: {fileID: 0}
+    - target: {fileID: 1365187880130533852, guid: db216a021f12b4548ad5a290a4285410,
+        type: 3}
+      propertyPath: _spacing
+      value: 750
+      objectReference: {fileID: 0}
     - target: {fileID: 2652456956452893701, guid: db216a021f12b4548ad5a290a4285410,
         type: 3}
       propertyPath: m_Pivot.x

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Data;
 using DG.Tweening;
+using Game;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,23 +9,21 @@ namespace UI.View
 {
     public sealed class TicketView : AnimationStatesUIElement<TicketView.AnimationStateTicket, TicketSettings, TicketAnimationsConfig>
     {
+        public SimpleScratch SimpleScratch => _simpleScratch;
         public BaseButtonView Button => _buyButton;
         [SerializeField] private RectTransform _root;
         [SerializeField] private TMP_Text _titleLabel;
         [SerializeField] private TMP_Text _rewardLabel;
-        [SerializeField] private Image _scratchFrame;
-        [SerializeField] private RawImage _scratchCenter;
         [SerializeField] private Image _artIcon;
         [SerializeField] private Image _frame;
         [SerializeField] private BaseButtonView _buyButton;
-        [SerializeField] private GameObject _lockedCanvasGroup;
+        [SerializeField] private RectTransform _locked;
+        [SerializeField] private SimpleScratch _simpleScratch;
 
         public void SetTitleLabel(string value) => _titleLabel.text = value;
         public void SetRewardLabel(int value) => _rewardLabel.text = $"{value}";
         public void SetArtImage(Sprite image) => _artIcon.sprite = image;
-        public void SetScratchFrame(Sprite image) => _scratchFrame.sprite = image;
-        public void SetScratchCenter(Texture texture) => _scratchCenter.texture = texture;
-        public void SetLocked(bool locked) => _lockedCanvasGroup.SetActive(locked);
+        public void SetLocked(bool locked) => _locked.gameObject.SetActive(locked);
         public void SetBuyButton(bool value) => _buyButton.gameObject.SetActive(value);
         public void SetPriceLabel(int value) => _buyButton.SetLabel(value);
         public enum AnimationStateTicket { Normal, Selected,SelectedLocked, Locked }

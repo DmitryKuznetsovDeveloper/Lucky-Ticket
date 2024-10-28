@@ -19,10 +19,13 @@ namespace Game
         private int _transparentPixels;     
         private bool _isDirty;        
 
-        private void Awake() => _scratchSurface = GetComponent<RawImage>();
+        public void Awake()
+        {
+            _scratchSurface = GetComponent<RawImage>();
+            _originalTexture = (Texture2D)_scratchSurface.texture!;
+        }
         void Start()
         {
-            _originalTexture = (Texture2D)_scratchSurface.texture!;
             _textureWithAlpha = new Texture2D(_originalTexture.width, _originalTexture.height, TextureFormat.RGBA32, false);
             _originalPixels = _originalTexture.GetPixels();
             _pixels = _originalPixels.Clone() as Color[];  // Копируем пиксели
@@ -39,22 +42,29 @@ namespace Game
 
         void Update()
         {
-            // Если нажата левая кнопка мыши, то начинается стирание
+            // Проверка на попадание в область, если нажата левая кнопка мыши
             if (Input.GetMouseButton(0))
             {
                 Vector2 mousePosition = Input.mousePosition;
-                DrawOnTexture(mousePosition);
-                _isDirty = true;  // Отмечаем, что текстура была изменена
+
+                // Проверяем, находится ли курсор в области текущего SimpleScratch
+                RectTransform rectTransform = _scratchSurface.rectTransform;
+                if (RectTransformUtility.RectangleContainsScreenPoint(rectTransform, mousePosition, null))
+                {
+                    DrawOnTexture(mousePosition);
+                    _isDirty = true;  // Отмечаем, что текстура была изменена
+                }
             }
 
             // Пересчитываем процент стирания только при изменении текстуры
             if (_isDirty)
             { 
                 _erasePercentage = (_transparentPixels / (float)_totalPixels) * 100f;
-                if (_erasePercentage >= 90f) OnEraseCompleted?.Invoke();
+                if (_erasePercentage >= 80f) OnEraseCompleted?.Invoke();
                 _isDirty = false;  // Сбрасываем флаг
             }
         }
+
 
         /// <summary>
         /// Метод для стирания (создания прозрачных областей) на текстуре
@@ -115,6 +125,7 @@ namespace Game
         /// </summary>
         public void ResetTexture()
         {
+            if (_originalPixels == null || _textureWithAlpha == null) return;
             _pixels = _originalPixels.Clone() as Color[];  // Восстанавливаем оригинальные пиксели
             _textureWithAlpha.SetPixels(_pixels);
             _textureWithAlpha.Apply();

@@ -6,71 +6,116 @@ using UnityEngine.EventSystems;
 using DG.Tweening;
 using Game;
 using UI.View;
+using VContainer;
 
 public sealed class InfiniteCarousel : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
-    [SerializeField] private GameObject _ticketPrefab; // Один префаб для создания элементов
-    [SerializeField] private List<FastTicketConfigs> _configs; // Конфигурации для элементов
-    [SerializeField] private float _spacing = 850f; // Расстояние между элементами
-    [SerializeField] private float _animationDuration = 1f; // Длительность анимации
-    
-    private readonly List<TicketView> _ticketViews = new List<TicketView>(); // Динамически созданные элементы
-    private readonly HashSet<int> _hiddenConfigs = new HashSet<int>(); // Индексы скрытых конфигов
-    private int _currentConfigsIndex;
-    private int _currentViewIndex;
-    private Vector2 _startDragPosition;
+    [SerializeField] private GameObject _ticketPrefab;
+    [SerializeField] private List<FastTicketConfigs> _configs;
+    [SerializeField] private float _spacing = 850f;
+    [SerializeField] private float _animationDuration = 1f;
 
-    // Событие, которое вызывается при изменении центрального элемента
+    private List<TicketView> _ticketViews = new List<TicketView>();
+    private List<PurchaseHandler> _purchaseHandlers = new List<PurchaseHandler>();
+    private readonly HashSet<int> _hiddenConfigs = new HashSet<int>();
+    private int _currentConfigsIndex;
+    private bool _isScrollLocked;
+    private Vector2 _startDragPosition;
+    private IObjectResolver _container;
+
+    [Inject]
+    public void Construct(IObjectResolver container) => _container = container;
+
     public event Action<FastTicketConfigs> OnCenterConfigChanged;
     
-    public SimpleScratch GetCurrentSimpleScratch() => _ticketViews[_currentViewIndex].GetComponentInChildren<SimpleScratch>();
-    public TicketView GetCurrentTicketView() => _ticketViews[_currentViewIndex];
+    public void LockScroll() => _isScrollLocked = true;
+    public void UnlockScroll() => _isScrollLocked = false;
+    
     private void Start()
     {
-        // Создаем три элемента на основе префаба
-        for (int i = 0; i < 3; i++)
+        InitializeTickets();
+        UpdateCarouselContent();
+        ArrangeCarousel();
+        InvokeCenterConfigChanged();
+    }
+
+    // Метод InitializeTickets для создания нужного количества TicketView
+    private void InitializeTickets()
+    {
+        // Установите нужное количество видимых элементов, например 5
+        for (int i = 0; i < 5; i++)
         {
             var ticketObject = Instantiate(_ticketPrefab, transform);
             var ticketView = ticketObject.GetComponent<TicketView>();
             _ticketViews.Add(ticketView);
         }
-
-        UpdateCarouselContent();
-        ArrangeCarousel();
-        UpdateCarouselState();
-        InvokeCenterConfigChanged(); // Уведомляем об изначально установленном центральном элементе
     }
 
-    // Метод для обновления данных каждого элемента из конфигураций
+    // Метод для обновления контента элементов карусели
     private void UpdateCarouselContent()
     {
         int visibleIndex = _currentConfigsIndex;
-        
+
+        // Освобождаем старые PurchaseHandler'ы
+        foreach (var handler in _purchaseHandlers)
+            handler.Dispose();
+
+        _purchaseHandlers.Clear();
+
+        // Заполняем каждый элемент новыми данными из конфигураций
         for (int i = 0; i < _ticketViews.Count; i++)
         {
-            // Находим следующий видимый конфиг
             visibleIndex = GetNextVisibleConfigIndex(visibleIndex);
 
             var config = _configs[visibleIndex];
-            _ticketViews[i].SetTitleLabel(config.TitleLabel);
-            _ticketViews[i].SetRewardLabel(config.GetReward());
-            _ticketViews[i].SetArtImage(config.ArtIcon);
-            _ticketViews[i].SetScratchFrame(config.ScratchFrame);
-            _ticketViews[i].SetScratchCenter(config.ScratchCenter);
-            _ticketViews[i].SetPriceLabel(config.BuyButton);
+            var ticketView = _ticketViews[i];
 
-            // Переходим к следующему индексу для следующего элемента
+            // Устанавливаем данные для каждого TicketView
+            ticketView.SetTitleLabel(config.TitleLabel);
+            ticketView.SetRewardLabel(config.GetReward());
+            ticketView.SetArtImage(config.ArtIcon);
+            ticketView.SetPriceLabel(config.BuyButton);
+
+            var simpleScratch = ticketView.SimpleScratch;
+            if (simpleScratch == null)
+            {
+                Debug.LogError("SimpleScratch is missing in TicketView. Ensure each TicketView has a unique SimpleScratch component.");
+                continue;
+            }
+
+            simpleScratch.ResetTexture();
+
+            // Создаем PurchaseHandler для каждого TicketView
+            var purchaseHandler = new PurchaseHandler(
+                _container.Resolve<CurrencyManager>(),
+                ticketView,
+                simpleScratch,
+                config.BuyButton,
+                config.GetReward(),
+                this
+            );
+
+            // Подписываемся на событие покупки для обновления конфига
+            purchaseHandler.OnPurchaseCompleted += () => RefreshConfig(config);
+
+            purchaseHandler.Initialize();
+            _purchaseHandlers.Add(purchaseHandler);
+
             visibleIndex = (visibleIndex + 1) % _configs.Count;
         }
     }
 
-    // Метод для получения текущей конфигурации центрального элемента
-    public FastTicketConfigs GetCurrentCenterConfig() => _configs[_currentConfigsIndex];
+    // Метод для обновления конкретного элемента новыми данными из следующего конфига
+    public void RefreshConfig(FastTicketConfigs config)
+    {
+        int index = _configs.IndexOf(config);
+        if (index >= 0)
+        {
+            _currentConfigsIndex = GetNextVisibleConfigIndex(index);
+            UpdateCarouselContent(); // Перезаполняем контент
+        }
+    }
 
-    // Вспомогательный метод для вызова события при изменении центрального элемента
-    private void InvokeCenterConfigChanged() => OnCenterConfigChanged?.Invoke(GetCurrentCenterConfig());
-
-    // Метод для поиска следующего видимого индекса конфигурации, который не скрыт
     private int GetNextVisibleConfigIndex(int startIndex)
     {
         int index = startIndex;
@@ -81,16 +126,7 @@ public sealed class InfiniteCarousel : MonoBehaviour, IBeginDragHandler, IDragHa
         return index;
     }
 
-    // Метод для скрытия конфигурации, чтобы она больше не показывалась
-    public void HideConfig(FastTicketConfigs config)
-    {
-        int index = _configs.IndexOf(config);
-        if (index >= 0)
-        {
-            _hiddenConfigs.Add(index);
-            UpdateCarouselContent();
-        }
-    }
+    private void InvokeCenterConfigChanged() => OnCenterConfigChanged?.Invoke(_configs[_currentConfigsIndex]);
 
     private void ArrangeCarousel()
     {
@@ -99,33 +135,22 @@ public sealed class InfiniteCarousel : MonoBehaviour, IBeginDragHandler, IDragHa
             float offset = (i - 1) * _spacing;
             _ticketViews[i].transform.localPosition = new Vector3(offset, i == 1 ? -50 : 0, 0);
             _ticketViews[i].transform.localScale = i == 1 ? Vector3.one * 1.2f : Vector3.one;
-
-            // Устанавливаем центральный элемент в последний индекс, чтобы он перекрывал остальные
             _ticketViews[i].transform.SetSiblingIndex(i == 1 ? _ticketViews.Count - 1 : i);
-        }
-        _currentViewIndex = 1;
-    }
-
-    private void UpdateCarouselState()
-    {
-        for (int i = 0; i < _ticketViews.Count; i++)
-        {
-            var state = i == 1 ? TicketView.AnimationStateTicket.Selected : TicketView.AnimationStateTicket.Normal;
-            _ticketViews[i].PlayAnimation(state);
         }
     }
 
     public void OnBeginDrag(PointerEventData eventData)
     {
+        if (_isScrollLocked) return;
         _startDragPosition = eventData.position;
     }
 
     public void OnDrag(PointerEventData eventData)
     {
+        if (_isScrollLocked) return;
         Vector2 currentDragPosition = eventData.position;
         float dragDistance = currentDragPosition.x - _startDragPosition.x;
 
-        // Перемещаем все элементы вместе с пальцем/мышкой
         for (int i = 0; i < _ticketViews.Count; i++)
         {
             float targetX = (i - 1) * _spacing + dragDistance;
@@ -135,33 +160,42 @@ public sealed class InfiniteCarousel : MonoBehaviour, IBeginDragHandler, IDragHa
 
     public void OnEndDrag(PointerEventData eventData)
     {
+        if (_isScrollLocked) return;
         float dragDistance = eventData.position.x - _startDragPosition.x;
-        if (Mathf.Abs(dragDistance) > 100f) // Проверяем минимальную длину свайпа для сдвига
+        if (Mathf.Abs(dragDistance) > 100f)
         {
-            // Определяем направление сдвига
             if (dragDistance > 0)
             {
+                // Прокрутка вправо
                 _currentConfigsIndex = GetNextVisibleConfigIndex((_currentConfigsIndex - 1 + _configs.Count) % _configs.Count);
-                // Перемещаем последний элемент на первую позицию
-                var lastTicket = _ticketViews[2];
-                _ticketViews.RemoveAt(2);
-                _ticketViews.Insert(0, lastTicket);
+                ShiftTicketsRight();
             }
             else
             {
+                // Прокрутка влево
                 _currentConfigsIndex = GetNextVisibleConfigIndex((_currentConfigsIndex + 1) % _configs.Count);
-                // Перемещаем первый элемент на последнюю позицию
-                var firstTicket = _ticketViews[0];
-                _ticketViews.RemoveAt(0);
-                _ticketViews.Add(firstTicket);
+                ShiftTicketsLeft();
             }
 
             UpdateCarouselContent();
-            InvokeCenterConfigChanged(); // Вызываем событие изменения центрального элемента
+            InvokeCenterConfigChanged();
         }
         
         SmoothMoveToCenter();
-        _currentViewIndex = 1;
+    }
+
+    private void ShiftTicketsRight()
+    {
+        var lastTicket = _ticketViews[_ticketViews.Count - 1];
+        _ticketViews.RemoveAt(_ticketViews.Count - 1);
+        _ticketViews.Insert(0, lastTicket);
+    }
+
+    private void ShiftTicketsLeft()
+    {
+        var firstTicket = _ticketViews[0];
+        _ticketViews.RemoveAt(0);
+        _ticketViews.Add(firstTicket);
     }
 
     private void SmoothMoveToCenter()
@@ -169,12 +203,18 @@ public sealed class InfiniteCarousel : MonoBehaviour, IBeginDragHandler, IDragHa
         for (int i = 0; i < _ticketViews.Count; i++)
         {
             float targetX = (i - 1) * _spacing;
-            _ticketViews[i].transform.DOLocalMoveX(targetX, _animationDuration)
-                .OnComplete(UpdateCarouselState);
+            _ticketViews[i].transform.DOLocalMoveX(targetX, _animationDuration).OnComplete(UpdateCarouselState);
             _ticketViews[i].transform.DOScale(i == 1 ? 1.2f : 1f, _animationDuration);
         }
-        
-        // Устанавливаем центральный элемент в последний индекс, чтобы он всегда отображался поверх других
         _ticketViews[1].transform.SetSiblingIndex(_ticketViews.Count - 1);
+    }
+
+    private void UpdateCarouselState()
+    {
+        for (int i = 0; i < _ticketViews.Count; i++)
+        {
+            var state = i == 1 ? TicketView.AnimationStateTicket.Selected : TicketView.AnimationStateTicket.Normal;
+            _ticketViews[i].PlayAnimation(state);
+        }
     }
 }

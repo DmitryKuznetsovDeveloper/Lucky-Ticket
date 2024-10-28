@@ -86,7 +86,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _brushTexture: {fileID: 2800000, guid: d9378ee3670656c40b135bfac6eb21c9, type: 3}
-  _brushSize: 0.4
+  _brushSize: 1
 --- !u!1 &2505675188595719347
 GameObject:
   m_ObjectHideFlags: 0
