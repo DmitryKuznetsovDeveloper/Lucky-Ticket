@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8f5eb9f4a9f4514a4ad58d0f14802e5, type: 3}
+  m_Name: AudioConfig
+  m_EditorClassIdentifier: 
+  MusicClips:
+  - {fileID: 8300000, guid: dea5e3a55519e2d478216d9472cbc4ed, type: 3}
+  - {fileID: 8300000, guid: 0e138cb1ad16485489b87d9b3f29f49f, type: 3}
+  - {fileID: 8300000, guid: 0bf7d275b3bdd424499fc059c3f39239, type: 3}
+  - {fileID: 8300000, guid: 5de5ab63947413c4ea523b73a1de26ea, type: 3}
+  - {fileID: 8300000, guid: 71c6cd611a930a84695bedca9798b930, type: 3}
+  ClickSound: {fileID: 8300000, guid: f360b57c8b185ba4d9dec5b790cc038e, type: 3}
+  PopupSound: {fileID: 8300000, guid: fab96db32183a6a4cbf740a6626d2333, type: 3}

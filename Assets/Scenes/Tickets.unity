@@ -371,11 +371,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameScreen
       objectReference: {fileID: 0}
-    - target: {fileID: 1365187880130533852, guid: db216a021f12b4548ad5a290a4285410,
-        type: 3}
-      propertyPath: _spacing
-      value: 750
-      objectReference: {fileID: 0}
     - target: {fileID: 2652456956452893701, guid: db216a021f12b4548ad5a290a4285410,
         type: 3}
       propertyPath: m_Pivot.x
@@ -476,6 +471,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2710517869530451300, guid: db216a021f12b4548ad5a290a4285410,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 150.5104
+      objectReference: {fileID: 0}
     - target: {fileID: 3743616564531644558, guid: db216a021f12b4548ad5a290a4285410,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -501,6 +501,16 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6011147018399832652, guid: db216a021f12b4548ad5a290a4285410,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6011147018399832652, guid: db216a021f12b4548ad5a290a4285410,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6168700556197124035, guid: db216a021f12b4548ad5a290a4285410,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -524,6 +534,16 @@ PrefabInstance:
     - target: {fileID: 6168700556197124035, guid: db216a021f12b4548ad5a290a4285410,
         type: 3}
       propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6415327599473821947, guid: db216a021f12b4548ad5a290a4285410,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6415327599473821947, guid: db216a021f12b4548ad5a290a4285410,
+        type: 3}
+      propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6574436447297377059, guid: db216a021f12b4548ad5a290a4285410,
@@ -542,7 +562,8 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 1782793756989499167, guid: db216a021f12b4548ad5a290a4285410, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: db216a021f12b4548ad5a290a4285410, type: 3}

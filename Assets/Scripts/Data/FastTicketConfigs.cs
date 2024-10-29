@@ -10,8 +10,6 @@ namespace Data
         public string TitleLabel;
         public int BuyButton;
         public Sprite ArtIcon;
-        public Sprite ScratchFrame;
-        public Texture ScratchCenter;
 
         [FormerlySerializedAs("rewards")]
         [Header("Награды")]
@@ -20,16 +18,18 @@ namespace Data
         // Метод для получения награды в зависимости от шансов
         public int GetReward()
         {
-            float randomValue = Random.Range(0f, 100f);
+            float randomValue = Random.Range(0, 100f);
 
             float cumulativeChance = 0f;
             foreach (var reward in Rewards)
             {
                 cumulativeChance += reward.dropChance;
                 if (randomValue <= cumulativeChance)
-                    return reward.RewardAmount;
+                {
+                    bool isNegative = Random.value < 0.34f;
+                    return isNegative ? -reward.RewardAmount : reward.RewardAmount;
+                }
             }
-
             return 0;
         }
     }

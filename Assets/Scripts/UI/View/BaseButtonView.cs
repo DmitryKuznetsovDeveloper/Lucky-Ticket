@@ -1,9 +1,11 @@
 ﻿using System;
 using Data;
 using DG.Tweening;
+using Game;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using VContainer;
 
 namespace UI.View
 {
@@ -17,7 +19,6 @@ namespace UI.View
         [SerializeField] private RectTransform _root;
         [SerializeField] private Image _bg;
         [SerializeField] private TMP_Text _labelButton;
-
         private Sequence _clickSequence;
 
         private void Awake() => _clickSequence = InitSequence(_config);

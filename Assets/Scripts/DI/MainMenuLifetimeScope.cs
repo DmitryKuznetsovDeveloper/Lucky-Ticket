@@ -1,3 +1,4 @@
+using Game;
 using UI.MediatorUI;
 using UI.View;
 using VContainer;
@@ -10,7 +11,6 @@ namespace DI
         {
             builder.Register<MainMenuMediator>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.RegisterComponentInHierarchy<MainMenuView>();
-            builder.RegisterComponentInHierarchy<SettingsPopup>();
         }
     }
 }

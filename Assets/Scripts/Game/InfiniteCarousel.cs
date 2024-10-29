@@ -15,8 +15,8 @@ public sealed class InfiniteCarousel : MonoBehaviour, IBeginDragHandler, IDragHa
     [SerializeField] private float _spacing = 850f;
     [SerializeField] private float _animationDuration = 1f;
 
-    private List<TicketView> _ticketViews = new List<TicketView>();
-    private List<PurchaseHandler> _purchaseHandlers = new List<PurchaseHandler>();
+    private readonly List<TicketView> _ticketViews = new List<TicketView>();
+    private readonly List<PurchaseHandler> _purchaseHandlers = new List<PurchaseHandler>();
     private readonly HashSet<int> _hiddenConfigs = new HashSet<int>();
     private int _currentConfigsIndex;
     private bool _isScrollLocked;
@@ -54,6 +54,7 @@ public sealed class InfiniteCarousel : MonoBehaviour, IBeginDragHandler, IDragHa
     // Метод для обновления контента элементов карусели
     private void UpdateCarouselContent()
     {
+        
         int visibleIndex = _currentConfigsIndex;
 
         // Освобождаем старые PurchaseHandler'ы
@@ -72,7 +73,8 @@ public sealed class InfiniteCarousel : MonoBehaviour, IBeginDragHandler, IDragHa
 
             // Устанавливаем данные для каждого TicketView
             ticketView.SetTitleLabel(config.TitleLabel);
-            ticketView.SetRewardLabel(config.GetReward());
+            var rewards = config.GetReward();
+            ticketView.SetRewardLabel(rewards);
             ticketView.SetArtImage(config.ArtIcon);
             ticketView.SetPriceLabel(config.BuyButton);
 
@@ -85,14 +87,19 @@ public sealed class InfiniteCarousel : MonoBehaviour, IBeginDragHandler, IDragHa
 
             simpleScratch.ResetTexture();
 
+            var audioManager = _container.Resolve<IAudioManager>();
+            audioManager.PlayPopupSound();
+            var currencyManager = _container.Resolve<CurrencyManager>();
             // Создаем PurchaseHandler для каждого TicketView
             var purchaseHandler = new PurchaseHandler(
-                _container.Resolve<CurrencyManager>(),
+                currencyManager,
                 ticketView,
                 simpleScratch,
                 config.BuyButton,
-                config.GetReward(),
-                this
+                rewards,
+                this,
+                audioManager
+                
             );
 
             // Подписываемся на событие покупки для обновления конфига
@@ -198,8 +205,9 @@ public sealed class InfiniteCarousel : MonoBehaviour, IBeginDragHandler, IDragHa
         _ticketViews.Add(firstTicket);
     }
 
-    private void SmoothMoveToCenter()
+    public void SmoothMoveToCenter()
     {
+        if (_ticketViews == null) return;
         for (int i = 0; i < _ticketViews.Count; i++)
         {
             float targetX = (i - 1) * _spacing;

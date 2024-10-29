@@ -11,18 +11,22 @@ using System.Reflection;
 using System.Runtime.Serialization;
 using Plugins.Sirenix.Odin_Inspector.Modules.Unity.Addressables;
 using Sirenix.OdinInspector;
-using Sirenix.OdinInspector.Editor;
 using Sirenix.Serialization;
 using Sirenix.Utilities;
+using UnityEngine;
+using UnityEngine.AddressableAssets;
+
+#if UNITY_EDITOR
+using Sirenix.OdinInspector.Editor;
 using Sirenix.Utilities.Editor;
 using UnityEditor;
 using UnityEditor.AddressableAssets;
 using UnityEditor.AddressableAssets.GUI;
 using UnityEditor.AddressableAssets.Settings;
-using UnityEngine;
-using UnityEngine.AddressableAssets;
+
 [assembly: RegisterAssetReferenceAttributeForwardToChild(typeof(InlineEditorAttribute))]
 [assembly: RegisterAssetReferenceAttributeForwardToChild(typeof(PreviewFieldAttribute))]
+#endif
 namespace Plugins.Sirenix.Odin_Inspector.Modules.Unity.Addressables
 {
     /// <summary>

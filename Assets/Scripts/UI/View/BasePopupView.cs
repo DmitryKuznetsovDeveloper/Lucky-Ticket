@@ -12,7 +12,6 @@ public class BasePopupView : MonoBehaviour , IPopup
     [SerializeField] private RectTransform _root;
     [SerializeField] private CanvasGroup _rootCanvasGroup;
     [SerializeField] private CanvasGroup _mainCanvasGroup;
-    
     private Sequence _showSequence;
     private Sequence _hideSequence;
 
