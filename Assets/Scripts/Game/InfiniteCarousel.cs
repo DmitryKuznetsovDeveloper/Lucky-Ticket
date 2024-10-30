@@ -207,12 +207,11 @@ public sealed class InfiniteCarousel : MonoBehaviour, IBeginDragHandler, IDragHa
 
     public void SmoothMoveToCenter()
     {
-        if (_ticketViews == null) return;
         for (int i = 0; i < _ticketViews.Count; i++)
         {
             float targetX = (i - 1) * _spacing;
-            _ticketViews[i].transform.DOLocalMoveX(targetX, _animationDuration).OnComplete(UpdateCarouselState);
-            _ticketViews[i].transform.DOScale(i == 1 ? 1.2f : 1f, _animationDuration);
+            _ticketViews[i].transform.DOLocalMoveX(targetX, _animationDuration).SetLink( _ticketViews[i].gameObject).OnComplete(UpdateCarouselState);
+            _ticketViews[i].transform.DOScale(i == 1 ? 1.2f : 1f, _animationDuration).SetLink( _ticketViews[i].gameObject);
         }
         _ticketViews[1].transform.SetSiblingIndex(_ticketViews.Count - 1);
     }

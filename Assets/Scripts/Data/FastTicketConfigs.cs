@@ -26,7 +26,7 @@ namespace Data
                 cumulativeChance += reward.dropChance;
                 if (randomValue <= cumulativeChance)
                 {
-                    bool isNegative = Random.value < 0.34f;
+                    bool isNegative = Random.value < 0.3f;
                     return isNegative ? -reward.RewardAmount : reward.RewardAmount;
                 }
             }
